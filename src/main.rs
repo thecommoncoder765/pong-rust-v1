@@ -17,6 +17,15 @@ const BALL_SIZE_HALF: f32 = BALL_SIZE * 0.5;
 
 const PLAYER_SPEED: f32 = 300.0;
 
+// This function makes sure the racket does not go above/below screen
+fn clamp_to_screen(value: &mut f32, low: f32, high: f32) {
+    if value < low {
+        value = low;
+    } else if value > high {
+        value = high;
+    }
+}
+
 fn main() -> GameResult {
     let (mut ctx, event_loop) = ContextBuilder::new("Pong_0", "Elijah Sears")
         .build()
@@ -50,12 +59,14 @@ impl MainState {
 impl event::EventHandler for MainState {
     fn update(&mut self, ctx: &mut Context) -> GameResult {
         let dt = ctx.time.delta().as_secs_f32(); // Deprecated. Was ggez::timer::delta(ctx).as_secs_f32()
+        let screen_h = ctx.gfx.drawable_size().1;
         if ctx.keyboard.is_key_pressed(KeyCode::W) { // DEPRECATED. Was keyboard::is_key_pressed(ctx, <KeyCode>)
             self.player_1_pos.y -= PLAYER_SPEED * dt;
         }
         if ctx.keyboard.is_key_pressed(KeyCode::S){
             self.player_1_pos.y += PLAYER_SPEED * dt;
         }
+        clamp_to_screen(&mut self.player_1_pos, RACKET_HEIGHT_HALF, screen_h-RACKET_HEIGHT_HALF);
         Ok(())
     }
     fn draw(&mut self, ctx: &mut Context) -> GameResult {
