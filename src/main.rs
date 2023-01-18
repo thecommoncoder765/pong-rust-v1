@@ -5,6 +5,7 @@ use ggez::graphics::{Color};
 // IMPORTANT: DEPRECATED. Use graphics::Point2; use ggez::nalgebra as nalg;
 use ggez::mint;
 use ggez::event;
+use ggez::input::keyboard::{KeyCode};
 
 const RACKET_HEIGHT: f32 = 100.0;
 const RACKET_WIDTH: f32 = 20.0;
@@ -46,6 +47,9 @@ impl MainState {
 
 impl event::EventHandler for MainState {
     fn update(&mut self, ctx: &mut Context) -> GameResult {
+        if ctx.keyboard.is_key_pressed(KeyCode::W) { // DEPRECATED. Was keyboard::is_key_pressed(ctx, <KeyCode>)
+            self.player_1_pos.y -= 1.0;
+        }
         Ok(())
     }
     fn draw(&mut self, ctx: &mut Context) -> GameResult {
