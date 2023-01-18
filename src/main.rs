@@ -30,7 +30,7 @@ fn move_racket(pos: &mut mint::Point2<f32>, keycode: KeyCode, y_dir: f32, ctx: &
     let dt = ctx.time.delta().as_secs_f32(); // Deprecated. Was ggez::timer::delta(ctx).as_secs_f32()
     let screen_h = ctx.gfx.drawable_size().1;
     if ctx.keyboard.is_key_pressed(keycode){
-        pos.y += y_dir * PLAYER_SPEED * dt;
+        pos.y -= y_dir * PLAYER_SPEED * dt; // Change to += for inverted controls!
     }
     clamp_to_screen(&mut pos.y, RACKET_HEIGHT_HALF, screen_h-RACKET_HEIGHT_HALF);
 }
@@ -67,7 +67,7 @@ impl MainState {
 
 impl event::EventHandler for MainState {
     fn update(&mut self, ctx: &mut Context) -> GameResult {
-        move_racket(&mut self.player_1_pos, KeyCode::W, 1.0, ctx);
+        move_racket(&mut self.player_1_pos, KeyCode::W, 1.0, ctx); // For these function calls, I inverted the operators by using -=, not +=
         move_racket(&mut self.player_1_pos, KeyCode::S, -1.0, ctx);
         move_racket(&mut self.player_2_pos, KeyCode::O, 1.0, ctx);
         move_racket(&mut self.player_2_pos, KeyCode::L, -1.0, ctx);
