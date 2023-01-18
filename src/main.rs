@@ -15,6 +15,8 @@ const RACKET_HEIGHT_HALF: f32 = RACKET_HEIGHT * 0.5;
 const BALL_SIZE: f32 = 30.0;
 const BALL_SIZE_HALF: f32 = BALL_SIZE * 0.5;
 
+const PLAYER_SPEED: f32 = 300.0;
+
 fn main() -> GameResult {
     let (mut ctx, event_loop) = ContextBuilder::new("Pong_0", "Elijah Sears")
         .build()
@@ -47,8 +49,12 @@ impl MainState {
 
 impl event::EventHandler for MainState {
     fn update(&mut self, ctx: &mut Context) -> GameResult {
+        let dt = ggez::timer::delta(ctx).as_secs_f32();
         if ctx.keyboard.is_key_pressed(KeyCode::W) { // DEPRECATED. Was keyboard::is_key_pressed(ctx, <KeyCode>)
-            self.player_1_pos.y -= 1.0;
+            self.player_1_pos.y -= PLAYER_SPEED * dt;
+        }
+        if ctx.keyboard.is_key_pressed(KeyCode::S){
+            self.player_1_pos += PLAYER_SPEED * dt;
         }
         Ok(())
     }
