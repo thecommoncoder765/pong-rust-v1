@@ -6,6 +6,9 @@ use ggez::event;
 
 const RACKET_HEIGHT: f32 = 100.0;
 const RACKET_WIDTH: f32 = 20.0;
+const RACKET_WIDTH_HALF = RACKET_WIDTH * 0.5;
+const RACKET_HEIGHT_HALF = RACKET_HEIGHT * 0.5;
+
 
 fn main() -> GameResult {
     let (mut ctx, event_loop) = ContextBuilder::new("Pong_0", "Elijah Sears")
@@ -35,15 +38,15 @@ impl event::EventHandler for MainState {
         let mut canvas = graphics::Canvas::from_frame(ctx, Color::BLACK);
 
         // Draw code here...
-        let rect = graphics::Rect::new(10.0, 10.0, 300.0, 150.0);
-        let rect_mesh = graphics::Mesh::new_rectangle(
+        let racket_rect = graphics::Rect::new(-RACKET_WIDTH_HALF, -RACKET_HEIGHT_HALF, RACKET_WIDTH, RACKET_HEIGHT);
+        let racket_mesh = graphics::Mesh::new_rectangle(
             ctx,
             graphics::DrawMode::fill(),
-            rect,
+            racket_rect,
             Color::WHITE
         )?;
 
-        canvas.draw(&rect_mesh, graphics::DrawParam::default()); // This was graphics::canvas::draw(&mut canvas, &rect_mesh graphics::DrawParam::default());
+        canvas.draw(&racket_mesh, graphics::DrawParam::default()); // This was graphics::canvas::draw(&mut canvas, &rect_mesh graphics::DrawParam::default());
 
         canvas.finish(ctx)
     }
