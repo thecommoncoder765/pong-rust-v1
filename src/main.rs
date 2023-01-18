@@ -26,6 +26,15 @@ fn clamp_to_screen(value: &mut f32, low: f32, high: f32) {
     }
 }
 
+fn move_racket(pos: &mut mint::Point2<f32>, keycode: KeyCode, y_dir: f32, ctx: &mut Context) {
+    let dt = ctx.time.delta().as_secs_f32(); // Deprecated. Was ggez::timer::delta(ctx).as_secs_f32()
+    let screen_h = ctx.gfx.drawable_size().1;
+    if ctx.keyboard.is_key_pressed(KeyCode::S){
+        pos.y += y_dir * PLAYER_SPEED * dt;
+    }
+    clamp_to_screen(&mut pos.y, RACKET_HEIGHT_HALF, screen_h-RACKET_HEIGHT_HALF);
+}
+
 fn main() -> GameResult {
     let (mut ctx, event_loop) = ContextBuilder::new("Pong_0", "Elijah Sears")
         .build()
@@ -58,15 +67,10 @@ impl MainState {
 
 impl event::EventHandler for MainState {
     fn update(&mut self, ctx: &mut Context) -> GameResult {
-        let dt = ctx.time.delta().as_secs_f32(); // Deprecated. Was ggez::timer::delta(ctx).as_secs_f32()
-        let screen_h = ctx.gfx.drawable_size().1;
-        if ctx.keyboard.is_key_pressed(KeyCode::W) { // DEPRECATED. Was keyboard::is_key_pressed(ctx, <KeyCode>)
-            self.player_1_pos.y -= PLAYER_SPEED * dt;
-        }
-        if ctx.keyboard.is_key_pressed(KeyCode::S){
-            self.player_1_pos.y += PLAYER_SPEED * dt;
-        }
-        clamp_to_screen(&mut self.player_1_pos.y, RACKET_HEIGHT_HALF, screen_h-RACKET_HEIGHT_HALF);
+        move_racket(&mut self.player_1_pos, KeyCode::W, 1.0, ctx);
+        move_racket(&mut self.player_1_pos, KeyCode::S, -1.0, ctx);
+        move_racket(&mut self.player_2_pos, KeyCode::O, 1.0, ctx);
+        move_racket(&mut self.player_2_pos, KeyCode::L, -1.0, ctx);
         Ok(())
     }
     fn draw(&mut self, ctx: &mut Context) -> GameResult {
