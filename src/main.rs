@@ -69,8 +69,8 @@ impl event::EventHandler for MainState {
     fn update(&mut self, ctx: &mut Context) -> GameResult {
         move_racket(&mut self.player_1_pos, KeyCode::W, 1.0, ctx); // For these function calls, I inverted the operators by using -=, not +=
         move_racket(&mut self.player_1_pos, KeyCode::S, -1.0, ctx);
-        move_racket(&mut self.player_2_pos, KeyCode::O, 1.0, ctx);
-        move_racket(&mut self.player_2_pos, KeyCode::L, -1.0, ctx);
+        move_racket(&mut self.player_2_pos, KeyCode::Up, 1.0, ctx); // Could change these two to O and L instead of arrow keys
+        move_racket(&mut self.player_2_pos, KeyCode::Down, -1.0, ctx);
         Ok(())
     }
     fn draw(&mut self, ctx: &mut Context) -> GameResult {
