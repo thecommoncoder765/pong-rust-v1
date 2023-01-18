@@ -49,12 +49,12 @@ impl MainState {
 
 impl event::EventHandler for MainState {
     fn update(&mut self, ctx: &mut Context) -> GameResult {
-        let dt = ggez::timer::delta(ctx).as_secs_f32();
+        let dt = ctx.timer.delta().as_secs_f32(); // Deprecated. Was ggez::timer::delta(ctx).as_secs_f32()
         if ctx.keyboard.is_key_pressed(KeyCode::W) { // DEPRECATED. Was keyboard::is_key_pressed(ctx, <KeyCode>)
             self.player_1_pos.y -= PLAYER_SPEED * dt;
         }
         if ctx.keyboard.is_key_pressed(KeyCode::S){
-            self.player_1_pos += PLAYER_SPEED * dt;
+            self.player_1_pos.y += PLAYER_SPEED * dt;
         }
         Ok(())
     }
