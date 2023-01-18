@@ -6,8 +6,8 @@ use ggez::event;
 
 const RACKET_HEIGHT: f32 = 100.0;
 const RACKET_WIDTH: f32 = 20.0;
-const RACKET_WIDTH_HALF = RACKET_WIDTH * 0.5;
-const RACKET_HEIGHT_HALF = RACKET_HEIGHT * 0.5;
+const RACKET_WIDTH_HALF: f32 = RACKET_WIDTH * 0.5;
+const RACKET_HEIGHT_HALF: f32 = RACKET_HEIGHT * 0.5;
 
 
 fn main() -> GameResult {
