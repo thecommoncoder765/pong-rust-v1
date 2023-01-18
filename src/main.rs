@@ -24,7 +24,7 @@ fn main() -> GameResult {
 
 struct MainState {
     player_1_pos: mint::Point2<f32>,
-    //player_2_pos: mint::Point2<f32>,
+    player_2_pos: mint::Point2<f32>,
 }
 
 impl MainState {
@@ -34,7 +34,7 @@ impl MainState {
 
         MainState {
             player_1_pos : mint::Point2{x: RACKET_WIDTH_HALF, y: screen_h_half},
-            //player_2_pos : mint::Point2{x: screen_w-RACKET_WIDTH_HALF, y: screen_h_half},
+            player_2_pos : mint::Point2{x: screen_w-RACKET_WIDTH_HALF, y: screen_h_half},
         }
     }
 }
@@ -60,11 +60,14 @@ impl event::EventHandler for MainState {
             .dest(self.player_1_pos);
 
         // Location for player 2
-        //let p2_draw_param = graphics::DrawParam::default();
-        //p2_draw_param.dest(self.player_2_pos);
+        let p2_draw_param = graphics::DrawParam::default()
+            .dest(self.player_2_pos);
 
-        // Draws player 1
+        // Draws player 1 & 2
         canvas.draw(&racket_mesh, p1_draw_param); // This was graphics::canvas::draw(&mut canvas, &rect_mesh graphics::DrawParam::default());
+        // P2
+        canvas.draw(&racket_mesh, p2_draw_param);
+
 
         canvas.finish(ctx)
     }
