@@ -56,8 +56,8 @@ impl event::EventHandler for MainState {
         )?;
 
         // Location for player 1
-        let p1_draw_param = graphics::DrawParam::default();
-        p1_draw_param.dest(self.player_1_pos);
+        let p1_draw_param = graphics::DrawParam::default()
+            .dest(self.player_1_pos);
 
         // Location for player 2
         //let p2_draw_param = graphics::DrawParam::default();
