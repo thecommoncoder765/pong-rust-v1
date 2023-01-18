@@ -29,7 +29,7 @@ fn clamp_to_screen(value: &mut f32, low: f32, high: f32) {
 fn move_racket(pos: &mut mint::Point2<f32>, keycode: KeyCode, y_dir: f32, ctx: &mut Context) {
     let dt = ctx.time.delta().as_secs_f32(); // Deprecated. Was ggez::timer::delta(ctx).as_secs_f32()
     let screen_h = ctx.gfx.drawable_size().1;
-    if ctx.keyboard.is_key_pressed(KeyCode::S){
+    if ctx.keyboard.is_key_pressed(keycode){
         pos.y += y_dir * PLAYER_SPEED * dt;
     }
     clamp_to_screen(&mut pos.y, RACKET_HEIGHT_HALF, screen_h-RACKET_HEIGHT_HALF);
