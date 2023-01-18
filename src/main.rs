@@ -19,10 +19,10 @@ const PLAYER_SPEED: f32 = 300.0;
 
 // This function makes sure the racket does not go above/below screen
 fn clamp_to_screen(value: &mut f32, low: f32, high: f32) {
-    if value < low {
-        value = low;
-    } else if value > high {
-        value = high;
+    if *value < low {
+        *value = low;
+    } else if *value > high {
+        *value = high;
     }
 }
 
