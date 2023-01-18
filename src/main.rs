@@ -66,7 +66,7 @@ impl event::EventHandler for MainState {
         if ctx.keyboard.is_key_pressed(KeyCode::S){
             self.player_1_pos.y += PLAYER_SPEED * dt;
         }
-        clamp_to_screen(&mut self.player_1_pos, RACKET_HEIGHT_HALF, screen_h-RACKET_HEIGHT_HALF);
+        clamp_to_screen(&mut self.player_1_pos.y, RACKET_HEIGHT_HALF, screen_h-RACKET_HEIGHT_HALF);
         Ok(())
     }
     fn draw(&mut self, ctx: &mut Context) -> GameResult {
