@@ -50,6 +50,9 @@ struct MainState {
     player_1_pos: mint::Point2<f32>,
     player_2_pos: mint::Point2<f32>,
     ball_pos: mint::Point2<f32>,
+    ball_vel: mint::Vector2<f32>,
+    player_1_score: i32,
+    player_2_score: i32,
 }
 
 impl MainState {
@@ -61,6 +64,9 @@ impl MainState {
             player_1_pos : mint::Point2{x: RACKET_WIDTH_HALF, y: screen_h_half},
             player_2_pos : mint::Point2{x: screen_w-RACKET_WIDTH_HALF, y: screen_h_half},
             ball_pos : mint::Point2{x: screen_w_half, y: screen_h_half},
+            ball_vel : mint::Vector2{x: 500.0, y: 16.0},
+            player_1_score : 0,
+            player_2_score : 0,
         }
     }
 }
