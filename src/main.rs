@@ -15,8 +15,8 @@ const RACKET_HEIGHT_HALF: f32 = RACKET_HEIGHT * 0.5;
 const BALL_SIZE: f32 = 30.0;
 const BALL_SIZE_HALF: f32 = BALL_SIZE * 0.5;
 
-const PLAYER_SPEED: f32 = 450.0;
-const BALL_SPEED: f32 = 450.0;
+const PLAYER_SPEED: f32 = 500.0;
+const BALL_SPEED: f32 = 470.0;
 
 const PT_INCREMENT: i32 = 1; // On goal, how many points you will get
 
@@ -115,12 +115,19 @@ impl event::EventHandler for MainState {
             randomize_vec(&mut self.ball_vel, BALL_SPEED, BALL_SPEED);
             self.player_1_score += PT_INCREMENT;
         }
+        if self.ball_pos.y < BALL_SIZE_HALF {
+            self.ball_pos.y = BALL_SIZE_HALF;
+            self.ball_vel.y = self.ball_vel.y.abs();
+        } else if self.ball_pos.y > screen_h - BALL_SIZE_HALF {
+            self.ball_pos.y = screen_h - BALL_SIZE_HALF;
+            self.ball_vel.y = -self.ball_vel.y.abs();
+        }
         Ok(())
     }
     fn draw(&mut self, ctx: &mut Context) -> GameResult {
         let mut canvas = graphics::Canvas::from_frame(ctx, Color::BLACK);
         let (screen_w, screen_h) = ctx.gfx.drawable_size();
-        let (screen_w_half, screen_h_half) = (screen_w*0.5, screen_h*0.5);
+        let (screen_w_half, _screen_h_half) = (screen_w*0.5, screen_h*0.5);
 
         // Draw code here...
         let racket_rect = graphics::Rect::new(-RACKET_WIDTH_HALF, -RACKET_HEIGHT_HALF, RACKET_WIDTH, RACKET_HEIGHT);
