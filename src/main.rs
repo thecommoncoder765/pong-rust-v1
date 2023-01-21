@@ -18,6 +18,8 @@ const BALL_SIZE_HALF: f32 = BALL_SIZE * 0.5;
 const PLAYER_SPEED: f32 = 450.0;
 const BALL_SPEED: f32 = 450.0;
 
+const PT_INCREMENT: u32 = 1; // On goal, how many points you will get
+
 // This function makes sure the racket does not go above/below screen
 fn clamp_to_screen(value: &mut f32, low: f32, high: f32) {
     if *value < low {
@@ -103,11 +105,13 @@ impl event::EventHandler for MainState {
             self.ball_pos.x = screen_w * 0.5;
             self.ball_pos.y = screen_h * 0.5;
             randomize_vec(&mut self.ball_vel, BALL_SPEED, BALL_SPEED);
+            self.player_2_pos += PT_INCREMENT;
         }
         if self.ball_pos.x > screen_w {
             self.ball_pos.x = screen_w * 0.5;
             self.ball_pos.y = screen_h * 0.5;
             randomize_vec(&mut self.ball_vel, BALL_SPEED, BALL_SPEED);
+            self.player_1_pos += PT_INCREMENT;
         }
         Ok(())
     }
