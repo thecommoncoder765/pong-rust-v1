@@ -141,7 +141,7 @@ impl event::EventHandler for MainState {
 
         // Text and position for scoring points
         let score_text = graphics::Text::new(format!("{}        {}", self.player_1_score, self.player_2_score));
-        let score_pos = mint::Point2{x: screen_w_half - 40.0, y: screen_h_half};
+        let score_pos = mint::Point2{x: screen_w_half - 40.5, y: screen_h_half};
 
         // Location for score text
         let sc_text_draw_param = graphics::DrawParam::default()
