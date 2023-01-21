@@ -6,6 +6,7 @@ use ggez::graphics::{Color};
 use ggez::mint;
 use ggez::event;
 use ggez::input::keyboard::{KeyCode};
+use rand::{thread_rng, Rng};
 
 const RACKET_HEIGHT: f32 = 100.0;
 const RACKET_WIDTH: f32 = 20.0;
@@ -35,6 +36,18 @@ fn move_racket(pos: &mut mint::Point2<f32>, keycode: KeyCode, y_dir: f32, ctx: &
     clamp_to_screen(&mut pos.y, RACKET_HEIGHT_HALF, screen_h-RACKET_HEIGHT_HALF);
 }
 
+fn randomize_vec(vec: &mut mint::Vector2<f32>, x: f32, y: f32) {
+    let mut rng = thread_rng();
+    vec.x = match rng.gen_bool(0.5) {
+        true => x,
+        false => -x,
+    };
+    vec.y = match rng.gen_bool(0.5) {
+        true => y,
+        false => -y,
+    };
+}
+
 fn main() -> GameResult {
     let (mut ctx, event_loop) = ContextBuilder::new("Pong_0", "Elijah Sears")
         .build()
@@ -60,11 +73,13 @@ impl MainState {
         let (screen_w, screen_h) = ctx.gfx.drawable_size(); // Could be graphics::GraphicsContext::drawable_size() with missing argument
         let (screen_w_half, screen_h_half) = (screen_w*0.5, screen_h*0.5);
 
+        let mut ball_vel = mint::Vector2{x: 0.0, y: 0.0};
+        randomize_vec(&mut ball_vel, 50.0, 50.0);
         MainState {
             player_1_pos : mint::Point2{x: RACKET_WIDTH_HALF, y: screen_h_half},
             player_2_pos : mint::Point2{x: screen_w-RACKET_WIDTH_HALF, y: screen_h_half},
             ball_pos : mint::Point2{x: screen_w_half, y: screen_h_half},
-            ball_vel : mint::Vector2{x: 500.0, y: 16.0},
+            ball_vel : ball_vel,
             player_1_score : 0,
             player_2_score : 0,
         }
@@ -73,10 +88,14 @@ impl MainState {
 
 impl event::EventHandler for MainState {
     fn update(&mut self, ctx: &mut Context) -> GameResult {
+        let dt = ctx.time.delta().as_secs_f32();
         move_racket(&mut self.player_1_pos, KeyCode::W, 1.0, ctx); // For these function calls, I inverted the operators by using -=, not +=
         move_racket(&mut self.player_1_pos, KeyCode::S, -1.0, ctx);
         move_racket(&mut self.player_2_pos, KeyCode::Up, 1.0, ctx); // Could change these two to O and L instead of arrow keys
         move_racket(&mut self.player_2_pos, KeyCode::Down, -1.0, ctx);
+        self.ball_pos.x += self.ball_vel.x * dt;
+        self.ball_pos.y += self.ball_vel.y * dt;
+
         Ok(())
     }
     fn draw(&mut self, ctx: &mut Context) -> GameResult {
