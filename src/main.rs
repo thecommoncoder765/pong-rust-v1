@@ -141,7 +141,12 @@ impl event::EventHandler for MainState {
 
         // Text and position for scoring points
         let score_text = graphics::Text::new(format!("{}        {}", self.player_1_score, self.player_2_score));
-        let score_pos = mint::Point2{x: screen_w_half - 40.5, y: 40.0}; // IDK Why y isnt negative. On a computer screen, the number rises as you go lower.
+        let mut score_pos = mint::Point2{x: screen_w_half, y: 40.0}; // IDK Why y isnt negative. On a computer screen, the number rises as you go lower.
+        let score_dimensions = score_text.measure(ctx)?;
+        let score_point = mint::Vector2{x: score_dimensions.x * 0.5, y: score_dimensions.y * 0.5};
+        score_pos.x -= score_point.x;
+        score_pos.y -= score_point.y;
+
 
         // Location for score text
         let sc_text_draw_param = graphics::DrawParam::default()
