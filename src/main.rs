@@ -18,7 +18,7 @@ const BALL_SIZE_HALF: f32 = BALL_SIZE * 0.5;
 const PLAYER_SPEED: f32 = 450.0;
 const BALL_SPEED: f32 = 450.0;
 
-const PT_INCREMENT: u32 = 1; // On goal, how many points you will get
+const PT_INCREMENT: i32 = 1; // On goal, how many points you will get
 
 // This function makes sure the racket does not go above/below screen
 fn clamp_to_screen(value: &mut f32, low: f32, high: f32) {
@@ -104,19 +104,23 @@ impl event::EventHandler for MainState {
         if self.ball_pos.x < 0.0 {
             self.ball_pos.x = screen_w * 0.5;
             self.ball_pos.y = screen_h * 0.5;
+
             randomize_vec(&mut self.ball_vel, BALL_SPEED, BALL_SPEED);
-            self.player_2_pos += PT_INCREMENT;
+            self.player_2_score += PT_INCREMENT;
         }
         if self.ball_pos.x > screen_w {
             self.ball_pos.x = screen_w * 0.5;
             self.ball_pos.y = screen_h * 0.5;
+
             randomize_vec(&mut self.ball_vel, BALL_SPEED, BALL_SPEED);
-            self.player_1_pos += PT_INCREMENT;
+            self.player_1_score += PT_INCREMENT;
         }
         Ok(())
     }
     fn draw(&mut self, ctx: &mut Context) -> GameResult {
         let mut canvas = graphics::Canvas::from_frame(ctx, Color::BLACK);
+        let (screen_w, screen_h) = ctx.gfx.drawable_size();
+        let (screen_w_half, screen_h_half) = (screen_w*0.5, screen_h*0.5);
 
         // Draw code here...
         let racket_rect = graphics::Rect::new(-RACKET_WIDTH_HALF, -RACKET_HEIGHT_HALF, RACKET_WIDTH, RACKET_HEIGHT);
@@ -135,6 +139,15 @@ impl event::EventHandler for MainState {
             Color::WHITE
         )?;
 
+        // Text and position for scoring points
+        let score_text = graphics::Text::new(format!("{}        {}", self.player_1_score, self.player_2_score));
+        let score_pos = mint::Point2{x: screen_w_half - 40.0, y: screen_h_half};
+
+        // Location for score text
+        let sc_text_draw_param = graphics::DrawParam::default()
+            .dest(score_pos); // Removed score_pos.into() due to error
+
+
         // Location for player 1
         let p1_draw_param = graphics::DrawParam::default()
             .dest(self.player_1_pos);
@@ -151,6 +164,7 @@ impl event::EventHandler for MainState {
         canvas.draw(&racket_mesh, p1_draw_param); // This was graphics::canvas::draw(&mut canvas, &rect_mesh graphics::DrawParam::default());
         canvas.draw(&racket_mesh, p2_draw_param);
         canvas.draw(&ball_mesh, ball_draw_param);
+        canvas.draw(&score_text, sc_text_draw_param); // Uses to refer to score_pos before using dest = <name>.into();
 
         canvas.finish(ctx)
     }
