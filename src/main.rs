@@ -57,7 +57,7 @@ fn main() -> GameResult {
 
     ctx.gfx.set_window_title("Pong -- Elijah Sears"); // This was graphics::set_window_title(&ctx, "Pong -------- Elijah Sears")
 
-    let mut game_state = MainState::new(&mut ctx);
+    let game_state = MainState::new(&mut ctx);
     event::run(ctx, event_loop, game_state) // No semicolon to return GameState
 }
 
