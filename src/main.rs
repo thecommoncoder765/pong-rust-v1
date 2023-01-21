@@ -12,11 +12,11 @@ const RACKET_HEIGHT: f32 = 100.0;
 const RACKET_WIDTH: f32 = 20.0;
 const RACKET_WIDTH_HALF: f32 = RACKET_WIDTH * 0.5;
 const RACKET_HEIGHT_HALF: f32 = RACKET_HEIGHT * 0.5;
-
 const BALL_SIZE: f32 = 30.0;
 const BALL_SIZE_HALF: f32 = BALL_SIZE * 0.5;
 
-const PLAYER_SPEED: f32 = 300.0;
+const PLAYER_SPEED: f32 = 450.0;
+const BALL_SPEED: f32 = 450.0;
 
 // This function makes sure the racket does not go above/below screen
 fn clamp_to_screen(value: &mut f32, low: f32, high: f32) {
@@ -74,7 +74,7 @@ impl MainState {
         let (screen_w_half, screen_h_half) = (screen_w*0.5, screen_h*0.5);
 
         let mut ball_vel = mint::Vector2{x: 0.0, y: 0.0};
-        randomize_vec(&mut ball_vel, 50.0, 50.0);
+        randomize_vec(&mut ball_vel, BALL_SPEED, BALL_SPEED);
         MainState {
             player_1_pos : mint::Point2{x: RACKET_WIDTH_HALF, y: screen_h_half},
             player_2_pos : mint::Point2{x: screen_w-RACKET_WIDTH_HALF, y: screen_h_half},
@@ -89,13 +89,26 @@ impl MainState {
 impl event::EventHandler for MainState {
     fn update(&mut self, ctx: &mut Context) -> GameResult {
         let dt = ctx.time.delta().as_secs_f32();
+        let (screen_w, screen_h) = ctx.gfx.drawable_size();
+
         move_racket(&mut self.player_1_pos, KeyCode::W, 1.0, ctx); // For these function calls, I inverted the operators by using -=, not +=
         move_racket(&mut self.player_1_pos, KeyCode::S, -1.0, ctx);
         move_racket(&mut self.player_2_pos, KeyCode::Up, 1.0, ctx); // Could change these two to O and L instead of arrow keys
         move_racket(&mut self.player_2_pos, KeyCode::Down, -1.0, ctx);
+
         self.ball_pos.x += self.ball_vel.x * dt;
         self.ball_pos.y += self.ball_vel.y * dt;
 
+        if self.ball_pos.x < 0.0 {
+            self.ball_pos.x = screen_w * 0.5;
+            self.ball_pos.y = screen_h * 0.5;
+            randomize_vec(&mut self.ball_vel, BALL_SPEED, BALL_SPEED);
+        }
+        if self.ball_pos.x > screen_w {
+            self.ball_pos.x = screen_w * 0.5;
+            self.ball_pos.y = screen_h * 0.5;
+            randomize_vec(&mut self.ball_vel, BALL_SPEED, BALL_SPEED);
+        }
         Ok(())
     }
     fn draw(&mut self, ctx: &mut Context) -> GameResult {
